@@ -6,6 +6,7 @@ import { CurrentConditions } from "./main-page/current-conditions/current-condit
 import { ConditionsAndZip } from "./conditions-and-zip.type";
 import { Forecast } from "./forecasts-list/forecast.type";
 
+// TO-DO : Keep this service for HTTP calls only.
 @Injectable()
 export class WeatherService {
   static URL = "http://api.openweathermap.org/data/2.5";
@@ -39,6 +40,14 @@ export class WeatherService {
     });
   }
 
+  fetchConditionsByLocation(zipcode: string): Observable<CurrentConditions> {
+    const baseUrl = `${WeatherService.URL}/weather`;
+    const queryParams = `?zip=${zipcode},us&units=imperial&APPID=${WeatherService.APPID}`;
+
+    return this.http.get<CurrentConditions>(`${baseUrl}${queryParams}`);
+  }
+
+  /** @deprecated */
   getCurrentConditions(): Signal<ConditionsAndZip[]> {
     return this.currentConditions.asReadonly();
   }

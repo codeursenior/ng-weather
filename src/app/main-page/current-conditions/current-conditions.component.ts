@@ -1,4 +1,4 @@
-import { Component, inject, Signal } from "@angular/core";
+import { Component, EventEmitter, inject, Input, Output } from "@angular/core";
 import { WeatherService } from "../../weather.service";
 import { LocationService } from "../../location.service";
 import { Router } from "@angular/router";
@@ -10,12 +10,15 @@ import { ConditionsAndZip } from "../../conditions-and-zip.type";
   styleUrls: ["./current-conditions.component.css"],
 })
 export class CurrentConditionsComponent {
-  private weatherService = inject(WeatherService);
-  private router = inject(Router);
-  protected locationService = inject(LocationService);
-  protected currentConditionsByZip: Signal<ConditionsAndZip[]> =
-    this.weatherService.getCurrentConditions();
+  @Input() currentConditionsByZip: ConditionsAndZip[] = [];
+  @Output() locationRemoved: EventEmitter<string> = new EventEmitter();
 
+  private weatherService = inject(WeatherService);
+  protected locationService = inject(LocationService);
+  // protected currentConditionsByZip: Signal<ConditionsAndZip[]> =
+  // this.weatherService.getCurrentConditions();
+
+  private router = inject(Router);
   showForecast(zipcode: string) {
     this.router.navigate(["/forecast", zipcode]);
   }

@@ -1,14 +1,9 @@
-import { Component } from "@angular/core";
-import { LocationService } from "../../location.service";
+import { Component, EventEmitter, Output } from "@angular/core";
 
 @Component({
   selector: "app-zipcode-entry",
   templateUrl: "./zipcode-entry.component.html",
 })
 export class ZipcodeEntryComponent {
-  constructor(private service: LocationService) {}
-
-  addLocation(zipcode: string) {
-    this.service.addLocation(zipcode);
-  }
+  @Output() locationAdded: EventEmitter<string> = new EventEmitter();
 }

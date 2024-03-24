@@ -3,6 +3,7 @@ import { WeatherService } from "./weather.service";
 
 export const LOCATIONS: string = "locations";
 
+// TO-DO : Keep this service for localStorage
 @Injectable()
 export class LocationService {
   locations: string[] = [];
