@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <app-zipcode-entry (locationAdded)="facade.addLocation($event)" />
   <app-current-conditions
-    [currentConditionsByZip]="facade.state().conditionsList"
+    [currentConditionsByZip]="facade.conditionsList$ | async"
   />
 </div>
