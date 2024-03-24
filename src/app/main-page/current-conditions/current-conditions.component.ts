@@ -12,7 +12,7 @@ export class CurrentConditionsComponent {
   @Input() currentConditionsByZip: ConditionsAndZip[] = [];
   @Output() locationRemoved: EventEmitter<string> = new EventEmitter();
 
-  private weatherService = inject(WeatherService);
+  weatherService = inject(WeatherService);
 
   private router = inject(Router);
   showForecast(zipcode: string) {

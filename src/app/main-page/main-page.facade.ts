@@ -19,7 +19,7 @@ export class MainPageFacade {
   private readonly state$ = this.state.asObservable();
 
   /* Selectors = Computed */
-  conditionList$ = this.state$.pipe(map((state: State) => state));
+  conditionList$ = this.state$;
 
   /* Actions */
   addLocation(zipcode: string): void {
@@ -49,6 +49,10 @@ export class MainPageFacade {
   private setConditionsList(zip: string, data: CurrentConditions): void {
     const condition: ConditionsAndZip = { zip, data };
     const conditionsList = [...this.state.value, condition];
+
+    console.log("[FACADE] Load conditions by location success");
+    console.table(conditionsList);
+
     this.state.next(conditionsList);
   }
 
