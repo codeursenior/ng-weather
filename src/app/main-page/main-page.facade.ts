@@ -27,7 +27,7 @@ export class MainPageFacade {
 
   /* Actions */
   addLocation(zipcode: string): void {
-    // We choose not to allow the same location to be added twice.
+    /* We choose not to allow the same location to be added twice. */
     const isLocationAlreadyLoaded = this.state.value
       .map(({ zip }) => zip)
       .includes(zipcode);

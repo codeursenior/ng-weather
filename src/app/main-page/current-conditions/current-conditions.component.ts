@@ -16,8 +16,12 @@ import { TabOption } from "app/shared/tabs/tabs.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CurrentConditionsComponent {
+  private _currentConditionsByZip: ConditionsAndZip[];
+
   @Input()
   set currentConditionsByZip(value: ConditionsAndZip[]) {
+    this._currentConditionsByZip = value;
+
     this.tabOptionList = value.map((location: ConditionsAndZip) => {
       const tabOption: TabOption = {
         title: `${location.data.name} (${location.zip})`,
@@ -31,7 +35,16 @@ export class CurrentConditionsComponent {
     });
   }
 
+  get currentConditionsByZip(): ConditionsAndZip[] {
+    return this._currentConditionsByZip;
+  }
+
   @Output() locationRemoved: EventEmitter<string> = new EventEmitter();
 
   tabOptionList: TabOption[];
+
+  onTabClose(index: number): void {
+    const location = this.currentConditionsByZip[index].zip;
+    this.locationRemoved.emit(location);
+  }
 }

@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input, Type } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  Type,
+} from "@angular/core";
 
 export type TabOption = {
   title: string;
@@ -18,6 +25,8 @@ export class TabsComponent {
   _tabOptionList: TabOptionList;
   currentTabSelected: TabOption | undefined;
 
+  @Output() tabClosed = new EventEmitter<number>();
+
   @Input()
   set tabOptionList(value: TabOptionList) {
     console.log("Build tabs component dynamically...");
@@ -35,9 +44,40 @@ export class TabsComponent {
 
   openTab(index: number) {
     console.log("open tab", index);
+    this.currentTabSelected = this._tabOptionList[index];
   }
 
   closeTab(index: number) {
     console.log("close tab", index);
+    this.tabClosed.emit(index);
+
+    /* If there is only one tab available, we don't want to display anything to the user. */
+    if (this.tabOptionList.length === 1) {
+      this.currentTabSelected = undefined;
+      this._tabOptionList = [];
+      return;
+    }
+
+    /* If the user closes the rightmost tab. */
+    const lastIndex = this.tabOptionList.length - 1;
+    const isLastIndex = lastIndex === index;
+    if (isLastIndex) {
+      this.currentTabSelected = this.tabOptionList[lastIndex - 1];
+      this.removeLastTab();
+      return;
+    }
+
+    /* If there are more than 2 tabs and the user does not close the last one, we display the next one */
+    this.currentTabSelected = this.tabOptionList[index + 1];
+    this.removeTabAtIndex(index);
+  }
+
+  private removeLastTab() {
+    this._tabOptionList.pop();
+  }
+
+  private removeTabAtIndex(index: number) {
+    /* Remove one tab at the specified index. */
+    this._tabOptionList.splice(index, 1);
   }
 }
