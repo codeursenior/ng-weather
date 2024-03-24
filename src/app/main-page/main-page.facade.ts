@@ -2,7 +2,9 @@ import { Injectable, inject } from "@angular/core";
 import { WeatherService } from "app/weather.service";
 import { CurrentConditions } from "./current-conditions/current-conditions.type";
 import { ConditionsAndZip } from "app/conditions-and-zip.type";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, zip } from "rxjs";
+import { LocationService } from "app/location.service";
+import { map } from "rxjs/operators";
 
 type State = ConditionsAndZip[];
 
@@ -13,6 +15,7 @@ const LOCATIONS = "locations";
   providedIn: "root",
 })
 export class MainPageFacade {
+  locationService = inject(LocationService);
   weatherService = inject(WeatherService);
 
   private initialState: State = [];
@@ -20,19 +23,26 @@ export class MainPageFacade {
   private readonly state$ = this.state.asObservable();
 
   /* Selectors = Computed */
-  conditionList$ = this.state$;
+  locationList$ = this.state$.pipe(map((state) => state.map(({ zip }) => zip)));
 
   /* Actions */
   addLocation(zipcode: string): void {
     console.log("[FACADE] addLocation : ", zipcode);
-    localStorage.setItem(LOCATIONS, JSON.stringify(this.state.value));
+
+    // We choose not to allow the same location to be added twice.
+    const isLocationAlreadyLoaded = this.state.value
+      .map(({ zip }) => zip)
+      .includes(zipcode);
+    if (isLocationAlreadyLoaded) {
+      return;
+    }
+
     this.loadConditionsByLocation(zipcode);
   }
 
   removeLocation(zipcode): void {
     console.log("[FACADE] removeLocation : ", zipcode);
     this.removeSomeLocation(zipcode);
-    localStorage.setItem(LOCATIONS, JSON.stringify(this.state.value));
   }
 
   /* Reducers */
@@ -44,17 +54,19 @@ export class MainPageFacade {
     }
 
     const conditionList = this.state.value.filter(({ zip }) => zip !== zipcode);
+    this.locationService.saveLocationList(conditionList.map(({ zip }) => zip));
     this.state.next(conditionList);
   }
 
   private setConditionsList(zip: string, data: CurrentConditions): void {
     const condition: ConditionsAndZip = { zip, data };
-    const conditionsList = [...this.state.value, condition];
+    const conditionList = [...this.state.value, condition];
 
     console.log("[FACADE] Load conditions by location success");
-    console.table(conditionsList);
+    console.table(conditionList);
 
-    this.state.next(conditionsList);
+    this.locationService.saveLocationList(conditionList.map(({ zip }) => zip));
+    this.state.next(conditionList);
   }
 
   /* Side effects */
