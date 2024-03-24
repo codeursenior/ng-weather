@@ -2,13 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  inject,
   Input,
   Output,
 } from "@angular/core";
-import { WeatherService } from "../../weather.service";
-import { Router } from "@angular/router";
 import { ConditionsAndZip } from "../../conditions-and-zip.type";
+import { ConditionDetailCardComponent } from "../condition-detail-card/condition-detail-card.component";
+import { TabOption } from "app/shared/tabs/tabs.component";
 
 @Component({
   selector: "app-current-conditions",
@@ -17,17 +16,22 @@ import { ConditionsAndZip } from "../../conditions-and-zip.type";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CurrentConditionsComponent {
-  @Input() currentConditionsByZip: ConditionsAndZip[];
+  @Input()
+  set currentConditionsByZip(value: ConditionsAndZip[]) {
+    this.tabOptionList = value.map((location: ConditionsAndZip) => {
+      const tabOption: TabOption = {
+        title: `${location.data.name} (${location.zip})`,
+        component: ConditionDetailCardComponent,
+        inputs: { weatherCondition: location },
+      };
+
+      console.log(tabOption);
+
+      return tabOption;
+    });
+  }
+
   @Output() locationRemoved: EventEmitter<string> = new EventEmitter();
 
-  weatherService = inject(WeatherService);
-
-  private router = inject(Router);
-  showForecast(zipcode: string) {
-    this.router.navigate(["/forecast", zipcode]);
-  }
-
-  get tabTitleList(): string[] {
-    return this.currentConditionsByZip.map(({ zip }) => zip);
-  }
+  tabOptionList: TabOption[];
 }

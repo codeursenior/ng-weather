@@ -1,10 +1,10 @@
-import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
   Input,
   inject,
 } from "@angular/core";
+import { Router } from "@angular/router";
 import { ConditionsAndZip } from "app/conditions-and-zip.type";
 import { WeatherService } from "app/weather.service";
 
@@ -15,7 +15,11 @@ import { WeatherService } from "app/weather.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConditionDetailCardComponent {
-  @Input() weatherCondition: ConditionsAndZip;
+  @Input() weatherCondition: ConditionsAndZip | undefined;
 
   weatherService = inject(WeatherService);
+
+  showForecast(zipcode: string) {
+    inject(Router).navigate(["/forecast", zipcode]);
+  }
 }

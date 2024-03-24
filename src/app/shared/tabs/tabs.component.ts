@@ -1,14 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  signal,
-} from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, Type } from "@angular/core";
 
-type TabOption = {
+export type TabOption = {
   title: string;
-  component: Component;
-  inputs: { [key: string]: unknown };
+  component: Type<any>;
+  inputs: Record<string, unknown>;
 };
 
 type TabOptionList = TabOption[];
@@ -20,9 +15,23 @@ type TabOptionList = TabOption[];
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TabsComponent {
-  @Input() tabOptionList: TabOptionList = [];
-  // stuff = input(0);
-  currentIndexTabSelected = signal(0);
+  _tabOptionList: TabOptionList;
+  currentTabSelected: TabOption | undefined;
+
+  @Input()
+  set tabOptionList(value: TabOptionList) {
+    console.log("Build tabs component dynamically...");
+    console.table(value);
+    this._tabOptionList = value;
+
+    /* Every time the user adds a new tab, it is automatically selected. */
+    const lastIndex = value.length - 1;
+    this.currentTabSelected = this._tabOptionList[lastIndex];
+  }
+
+  get tabOptionList(): TabOptionList {
+    return this._tabOptionList;
+  }
 
   openTab(index: number) {
     console.log("open tab", index);
@@ -30,9 +39,5 @@ export class TabsComponent {
 
   closeTab(index: number) {
     console.log("close tab", index);
-  }
-
-  isTabOptionListDisplayed() {
-    return this.tabOptionList.length > 0;
   }
 }

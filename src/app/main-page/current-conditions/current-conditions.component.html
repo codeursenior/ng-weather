@@ -1,10 +1,3 @@
 <div>
-  <app-tabs [tabTitleList]="tabTitleList">
-    @for (location of currentConditionsByZip; track location.zip; let index =
-    $index) {
-    <app-condition-detail-card
-      [weatherCondition]="location"
-    ></app-condition-detail-card>
-    }
-  </app-tabs>
+  <app-tabs [tabOptionList]="tabOptionList" />
 </div>
