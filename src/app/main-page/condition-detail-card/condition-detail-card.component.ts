@@ -15,7 +15,7 @@ import { WeatherService } from "app/weather.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConditionDetailCardComponent {
-  @Input() weatherCondition: ConditionsAndZip | undefined;
+  @Input({ required: true }) weatherCondition: ConditionsAndZip;
 
   weatherService = inject(WeatherService);
 
