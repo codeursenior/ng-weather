@@ -9,7 +9,9 @@ type State = ConditionsAndZip[];
 // TO-DO : Move code to location service
 const LOCATIONS = "locations";
 
-@Injectable()
+@Injectable({
+  providedIn: "root",
+})
 export class MainPageFacade {
   weatherService = inject(WeatherService);
 
