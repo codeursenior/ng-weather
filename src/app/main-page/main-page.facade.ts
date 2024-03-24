@@ -3,7 +3,6 @@ import { WeatherService } from "app/weather.service";
 import { CurrentConditions } from "./current-conditions/current-conditions.type";
 import { ConditionsAndZip } from "app/conditions-and-zip.type";
 import { BehaviorSubject } from "rxjs";
-import { map } from "rxjs/operators";
 
 type State = ConditionsAndZip[];
 
@@ -30,8 +29,8 @@ export class MainPageFacade {
 
   removeLocation(zipcode): void {
     console.log("[FACADE] removeLocation : ", zipcode);
-    localStorage.setItem(LOCATIONS, JSON.stringify(this.state.value));
     this.removeSomeLocation(zipcode);
+    localStorage.setItem(LOCATIONS, JSON.stringify(this.state.value));
   }
 
   /* Reducers */
