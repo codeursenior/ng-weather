@@ -2,7 +2,7 @@ import { Injectable, inject } from "@angular/core";
 import { WeatherService } from "app/weather.service";
 import { CurrentConditions } from "./current-conditions/current-conditions.type";
 import { ConditionsAndZip } from "app/conditions-and-zip.type";
-import { BehaviorSubject, zip } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 import { LocationService } from "app/location.service";
 import { map } from "rxjs/operators";
 
@@ -20,15 +20,13 @@ export class MainPageFacade {
 
   private initialState: State = [];
   private readonly state = new BehaviorSubject<State>(this.initialState);
-  private readonly state$ = this.state.asObservable();
+  readonly state$ = this.state.asObservable();
 
   /* Selectors = Computed */
   locationList$ = this.state$.pipe(map((state) => state.map(({ zip }) => zip)));
 
   /* Actions */
   addLocation(zipcode: string): void {
-    console.log("[FACADE] addLocation : ", zipcode);
-
     // We choose not to allow the same location to be added twice.
     const isLocationAlreadyLoaded = this.state.value
       .map(({ zip }) => zip)
@@ -41,7 +39,6 @@ export class MainPageFacade {
   }
 
   removeLocation(zipcode): void {
-    console.log("[FACADE] removeLocation : ", zipcode);
     this.removeSomeLocation(zipcode);
   }
 
@@ -61,10 +58,6 @@ export class MainPageFacade {
   private setConditionsList(zip: string, data: CurrentConditions): void {
     const condition: ConditionsAndZip = { zip, data };
     const conditionList = [...this.state.value, condition];
-
-    console.log("[FACADE] Load conditions by location success");
-    console.table(conditionList);
-
     this.locationService.saveLocationList(conditionList.map(({ zip }) => zip));
     this.state.next(conditionList);
   }

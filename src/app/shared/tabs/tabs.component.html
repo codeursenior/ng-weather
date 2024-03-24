@@ -1,0 +1,10 @@
+@for (title of tabOptionList; track $index) {
+<div (click)="openTab($index)">
+  {{ title }}
+  <span (click)="closeTab($index)">&times;</span>
+</div>
+} @if (isTabOptionListDisplayed) {
+<div style="border: solid 1px black; width: fit-content; height: fit-content">
+  <ng-content></ng-content>
+</div>
+}

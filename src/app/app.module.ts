@@ -14,6 +14,8 @@ import { routing } from "./app.routing";
 import { HttpClientModule } from "@angular/common/http";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
+import { TabsComponent } from "./shared/tabs/tabs.component";
+import { ConditionDetailCardComponent } from "./main-page/condition-detail-card/condition-detail-card.component";
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { environment } from "../environments/environment";
     ForecastsListComponent,
     CurrentConditionsComponent,
     MainPageComponent,
+    ConditionDetailCardComponent,
+    TabsComponent,
   ],
   imports: [
     BrowserModule,
