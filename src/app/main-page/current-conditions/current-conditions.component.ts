@@ -29,8 +29,6 @@ export class CurrentConditionsComponent {
         inputs: { weatherCondition: location },
       };
 
-      console.log(tabOption);
-
       return tabOption;
     });
   }

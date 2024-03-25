@@ -29,8 +29,6 @@ export class TabsComponent {
 
   @Input()
   set tabOptionList(value: TabOptionList) {
-    console.log("Build tabs component dynamically...");
-    console.table(value);
     this._tabOptionList = value;
 
     /* Every time the user adds a new tab, it is automatically selected. */
@@ -43,12 +41,10 @@ export class TabsComponent {
   }
 
   openTab(index: number) {
-    console.log("open tab", index);
     this.currentTabSelected = this._tabOptionList[index];
   }
 
   closeTab(index: number) {
-    console.log("close tab", index);
     this.tabClosed.emit(index);
 
     /* If there is only one tab available, we don't want to display anything to the user. */
