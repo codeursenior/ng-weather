@@ -1,3 +1,22 @@
 :host {
   display: block;
+  width: 50%;
+}
+
+.tab-title-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tab-title {
+  padding: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+  font-size: 16px;
+  color: white;
+  background-color: #7fbeda;
+}
+
+.tab-content {
+  border: solid 1px black;
 }

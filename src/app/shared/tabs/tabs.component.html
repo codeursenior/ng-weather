@@ -1,10 +1,13 @@
-@for (tab of tabOptionList; track $index) {
-<div (click)="openTab($index)">
-  {{ tab.title }}
-  <span (click)="closeTab($index)">&times;</span>
+<div class="tab-title-wrapper">
+  @for (tab of tabOptionList; track $index) {
+  <div (click)="openTab($index)" class="tab-title">
+    {{ tab.title }}
+    <span (click)="closeTab($index)">&times;</span>
+  </div>
+  }
 </div>
-} @if (currentTabSelected) {
-<div style="background-color: grey">
+@if (currentTabSelected) {
+<div class="tab-content">
   <ng-container
     *ngComponentOutlet="
       currentTabSelected.component;

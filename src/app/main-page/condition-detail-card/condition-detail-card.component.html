@@ -1,4 +1,4 @@
-<div class="well flex" (click)="showForecast(weatherCondition.zip)">
+<div class="card-container" (click)="showForecast(weatherCondition.zip)">
   <div>
     <h3>{{ weatherCondition.data.name }} ({{ weatherCondition.zip }})</h3>
     <h4>Current conditions: {{ weatherCondition.data.weather[0].main }}</h4>
