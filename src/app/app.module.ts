@@ -11,11 +11,12 @@ import { CurrentConditionsComponent } from "./main-page/current-conditions/curre
 import { MainPageComponent } from "./main-page/main-page.component";
 import { RouterModule } from "@angular/router";
 import { routing } from "./app.routing";
-import { HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
 import { TabsComponent } from "./shared/tabs/tabs.component";
 import { ConditionDetailCardComponent } from "./main-page/condition-detail-card/condition-detail-card.component";
+import { HttpCacheInterceptor } from "./core/interceptors/http-cache.interceptor";
 
 @NgModule({
   declarations: [
@@ -37,7 +38,15 @@ import { ConditionDetailCardComponent } from "./main-page/condition-detail-card/
       enabled: environment.production,
     }),
   ],
-  providers: [LocationService, WeatherService],
+  providers: [
+    LocationService,
+    WeatherService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpCacheInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

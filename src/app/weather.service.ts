@@ -15,7 +15,6 @@ export class WeatherService {
     "https://raw.githubusercontent.com/udacity/Sunshine-Version-2/sunshine_master/app/src/main/res/drawable-hdpi/";
   private readonly http = inject(HttpClient);
 
-  // KEEP
   fetchConditionsByLocation(zipcode: string): Observable<CurrentConditions> {
     const baseUrl = `${WeatherService.URL}/weather`;
     const queryParams = `?zip=${zipcode},us&units=imperial&APPID=${WeatherService.APPID}`;
@@ -23,7 +22,6 @@ export class WeatherService {
     return this.http.get<CurrentConditions>(`${baseUrl}${queryParams}`);
   }
 
-  // KEEP
   getForecast(zipcode: string): Observable<Forecast> {
     // Here we make a request to get the forecast data from the API. Note the use of backticks and an expression to insert the zipcode
     return this.http.get<Forecast>(
@@ -31,7 +29,6 @@ export class WeatherService {
     );
   }
 
-  // KEEP
   getWeatherIcon(id): string {
     if (id >= 200 && id <= 232)
       return WeatherService.ICON_URL + "art_storm.png";
