@@ -3,19 +3,14 @@ import { WeatherService } from "app/weather.service";
 import { CurrentConditions } from "./current-conditions/current-conditions.type";
 import { ConditionsAndZip } from "app/conditions-and-zip.type";
 import { BehaviorSubject } from "rxjs";
-import { LocationService } from "app/location.service";
 import { map } from "rxjs/operators";
 
 type State = ConditionsAndZip[];
-
-// TO-DO : Move code to location service
-const LOCATIONS = "locations";
 
 @Injectable({
   providedIn: "root",
 })
 export class MainPageFacade {
-  locationService = inject(LocationService);
   weatherService = inject(WeatherService);
 
   constructor() {
@@ -57,14 +52,12 @@ export class MainPageFacade {
     }
 
     const conditionList = this.state.value.filter(({ zip }) => zip !== zipcode);
-    this.locationService.saveLocationList(conditionList.map(({ zip }) => zip));
     this.state.next(conditionList);
   }
 
   private setConditionsList(zip: string, data: CurrentConditions): void {
     const condition: ConditionsAndZip = { zip, data };
     const conditionList = [...this.state.value, condition];
-    this.locationService.saveLocationList(conditionList.map(({ zip }) => zip));
     this.state.next(conditionList);
   }
 
