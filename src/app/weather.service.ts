@@ -1,10 +1,9 @@
-import { Injectable, Signal, inject, signal } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Observable } from "rxjs";
-
 import { HttpClient } from "@angular/common/http";
 import { CurrentConditions } from "./main-page/current-conditions/current-conditions.type";
-import { ConditionsAndZip } from "./conditions-and-zip.type";
 import { Forecast } from "./forecasts-list/forecast.type";
+import { tap } from "rxjs/operators";
 
 // TO-DO : Keep this service for HTTP calls only.
 @Injectable()

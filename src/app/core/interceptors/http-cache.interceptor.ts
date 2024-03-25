@@ -1,31 +1,63 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
+  HttpResponse,
 } from "@angular/common/http";
 import { Observable, of } from "rxjs";
-import { CacheService } from "../services/http-cache.service";
+import { HttpCacheService } from "../services/http-cache.service";
+import { tap } from "rxjs/operators";
 
 @Injectable()
 export class HttpCacheInterceptor implements HttpInterceptor {
-  constructor(private cacheService: CacheService) {}
+  httpCacheService = inject(HttpCacheService);
 
   intercept(
-    req: HttpRequest<any>,
+    request: HttpRequest<unknown>,
     next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    const cachedResponse = this.cacheService.load(this.getCacheKey(req));
-    if (cachedResponse) {
-      return of(cachedResponse);
-    } else {
-      return next.handle(req);
+  ): Observable<HttpEvent<unknown>> {
+    if (!this.isCachable(request)) {
+      return;
+    }
+
+    const key = this.getCacheKey(request);
+    const response = this.httpCacheService.load(key);
+
+    console.log(response);
+
+    if (response) {
+      console.log("We use cached response !");
+      return of(response);
+    }
+
+    if (!response) {
+      console.log("We send a request to the backend");
+      // this.httpCacheService.save()
+      return next.handle(request).pipe(
+        tap((event) => {
+          if (event instanceof HttpResponse) {
+            const key = this.getCacheKey(request);
+            const twoHoursInMinutes = 120;
+            console.log("EVENT BODY");
+            console.log(event.body);
+            this.httpCacheService.save(key, event.body, twoHoursInMinutes);
+          }
+        })
+      );
     }
   }
 
-  getCacheKey(req: HttpRequest<any>): string {
-    const url = req.urlWithParams;
-    return url;
+  private getCacheKey(request: HttpRequest<any>): string {
+    return request.urlWithParams;
+  }
+
+  private isCachable(request: HttpRequest<unknown>) {
+    const isRequestGET = request.method === "GET";
+    const isWeatherInfoRequest = request.url.startsWith(
+      "http://api.openweathermap.org/data/2.5/weather?"
+    );
+    return isRequestGET && isWeatherInfoRequest;
   }
 }
