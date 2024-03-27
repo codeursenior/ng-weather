@@ -21,7 +21,7 @@ export class HttpCacheService {
     localStorage.setItem(key, JSON.stringify(httpResponseCached));
   }
 
-  load(key: string): any | null {
+  load(key: string): HttpResponse<unknown> | null {
     const httpResponseCachedAsString = localStorage.getItem(key);
 
     /* No http request was found in cache. */
@@ -29,11 +29,11 @@ export class HttpCacheService {
       return null;
     }
 
-    /* Http request was found in cache but has timed out. */
     const response: HttpRequestCached = JSON.parse(httpResponseCachedAsString);
     const now = new Date().getTime();
     const isHttpRequestHasExpired = now > response.expiration;
 
+    /* Http request was found in cache but has timed out. */
     if (isHttpRequestHasExpired) {
       localStorage.removeItem(key);
       return null;
