@@ -39,7 +39,7 @@ export class HttpCacheInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       tap((event) => {
         if (event instanceof HttpResponse) {
-          console.log(`We send to the backend the request ${key}`);
+          console.info(`We send to the backend the request ${key}`);
           this.httpCacheService.save(
             key,
             event,
