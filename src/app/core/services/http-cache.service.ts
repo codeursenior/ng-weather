@@ -27,7 +27,6 @@ export class HttpCacheService {
 
     /* Http request was found in cache but has timed out. */
     const record = JSON.parse(item);
-    console.log(record);
     const now = new Date().getTime();
     const isHttpRequestHasExpired = now > record.expiration;
 

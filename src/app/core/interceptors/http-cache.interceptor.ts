@@ -19,7 +19,7 @@ export class HttpCacheInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     if (!this.isCachable(request)) {
-      return;
+      return next.handle(request);
     }
 
     const key = this.getCacheKey(request);
@@ -34,15 +34,14 @@ export class HttpCacheInterceptor implements HttpInterceptor {
 
     if (!response) {
       console.log("We send a request to the backend");
-      // this.httpCacheService.save()
       return next.handle(request).pipe(
         tap((event) => {
           if (event instanceof HttpResponse) {
             const key = this.getCacheKey(request);
             const twoHoursInMinutes = 120;
             console.log("EVENT BODY");
-            console.log(event.body);
-            this.httpCacheService.save(key, event.body, twoHoursInMinutes);
+            console.log(event);
+            this.httpCacheService.save(key, event, twoHoursInMinutes);
           }
         })
       );
