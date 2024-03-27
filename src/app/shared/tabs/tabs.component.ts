@@ -63,7 +63,7 @@ export class TabsComponent {
       return;
     }
 
-    /* If there are more than 2 tabs and the user does not close the last one, we display the next one */
+    /* If there are more than 2 tabs and the user does not close the last one, we display the next one. */
     this.currentTabSelected = this.tabOptionList[index + 1];
     this.removeTabAtIndex(index);
   }
