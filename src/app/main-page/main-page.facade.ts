@@ -13,12 +13,6 @@ type State = ConditionsAndZip[];
 export class MainPageFacade {
   weatherService = inject(WeatherService);
 
-  constructor() {
-    this.loadConditionsByLocation("10001");
-    this.loadConditionsByLocation("92210");
-    this.loadConditionsByLocation("90210");
-  }
-
   private initialState: State = [];
   private readonly state = new BehaviorSubject<State>(this.initialState);
   readonly state$ = this.state.asObservable();
