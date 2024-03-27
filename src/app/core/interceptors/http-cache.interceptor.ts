@@ -23,16 +23,17 @@ export class HttpCacheInterceptor implements HttpInterceptor {
     }
 
     const key = this.getCacheKey(request);
-    const response = this.httpCacheService.load(key);
+    const record = this.httpCacheService.load(key);
 
-    if (response) {
+    // record == httpResponse
+    if (record) {
       console.log("We use cached response !");
-      console.log(response);
-      const res = new HttpResponse({ body: response.body, status: 200 });
+      console.log(record);
+      const res = new HttpResponse({ body: record.body, status: 200 });
       return of(res);
     }
 
-    if (!response) {
+    if (!record) {
       console.log("We send a request to the backend");
       return next.handle(request).pipe(
         tap((event) => {
@@ -41,7 +42,7 @@ export class HttpCacheInterceptor implements HttpInterceptor {
             const twoHoursInMinutes = 120;
             console.log("EVENT BODY");
             console.log(event.body);
-            this.httpCacheService.save(key, event.body, twoHoursInMinutes);
+            this.httpCacheService.save(key, event, twoHoursInMinutes);
           }
         })
       );
