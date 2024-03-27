@@ -25,11 +25,11 @@ export class HttpCacheInterceptor implements HttpInterceptor {
     const key = this.getCacheKey(request);
     const response = this.httpCacheService.load(key);
 
-    console.log(response);
-
     if (response) {
       console.log("We use cached response !");
-      return of(response);
+      console.log(response);
+      const res = new HttpResponse({ body: response.body, status: 200 });
+      return of(res);
     }
 
     if (!response) {
@@ -40,8 +40,8 @@ export class HttpCacheInterceptor implements HttpInterceptor {
             const key = this.getCacheKey(request);
             const twoHoursInMinutes = 120;
             console.log("EVENT BODY");
-            console.log(event);
-            this.httpCacheService.save(key, event, twoHoursInMinutes);
+            console.log(event.body);
+            this.httpCacheService.save(key, event.body, twoHoursInMinutes);
           }
         })
       );

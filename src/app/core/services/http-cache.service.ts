@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
 
 type HttpRequestCached = {
-  key: string;
-  response: unknown;
+  value: unknown;
   expiration: number;
 };
 @Injectable({
@@ -10,7 +9,7 @@ type HttpRequestCached = {
 })
 export class HttpCacheService {
   save(key: string, data: any, expirationInMinutes: number): void {
-    const record = {
+    const record: HttpRequestCached = {
       value: data,
       expiration: new Date().getTime() + expirationInMinutes * 60000,
     };
