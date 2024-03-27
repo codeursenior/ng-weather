@@ -1,11 +1,10 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-
 import { AppComponent } from "./app.component";
 import { ZipcodeEntryComponent } from "./main-page/zipcode-entry/zipcode-entry.component";
 import { ForecastsListComponent } from "./forecasts-list/forecasts-list.component";
-import { WeatherService } from "./weather.service";
+import { WeatherService } from "./core/services/weather.service";
 import { CurrentConditionsComponent } from "./main-page/current-conditions/current-conditions.component";
 import { MainPageComponent } from "./main-page/main-page.component";
 import { RouterModule } from "@angular/router";
@@ -16,6 +15,7 @@ import { environment } from "../environments/environment";
 import { TabsComponent } from "./shared/tabs/tabs.component";
 import { ConditionDetailCardComponent } from "./main-page/condition-detail-card/condition-detail-card.component";
 import { HttpCacheInterceptor } from "./core/interceptors/http-cache.interceptor";
+import { WeatherIconService } from "./core/services/weather-icon.service";
 
 @NgModule({
   declarations: [
@@ -39,6 +39,7 @@ import { HttpCacheInterceptor } from "./core/interceptors/http-cache.interceptor
   ],
   providers: [
     WeatherService,
+    WeatherIconService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpCacheInterceptor,

@@ -12,7 +12,7 @@
         {{ dailyForecast.temp.max | number : ".0-0" }}
 
         <img
-          [src]="weatherService.getWeatherIcon(dailyForecast.weather[0].id)"
+          [src]="weatherIconService.getIcon(dailyForecast.weather[0].id)"
           class="icon"
         />
       </li>

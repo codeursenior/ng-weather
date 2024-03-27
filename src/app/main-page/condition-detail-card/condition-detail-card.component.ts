@@ -5,8 +5,8 @@ import {
   inject,
 } from "@angular/core";
 import { Router } from "@angular/router";
-import { ConditionsAndZip } from "app/conditions-and-zip.type";
-import { WeatherService } from "app/weather.service";
+import { ConditionsAndZip } from "app/main-page/conditions-and-zip.type";
+import { WeatherIconService } from "app/core/services/weather-icon.service";
 
 @Component({
   selector: "app-condition-detail-card",
@@ -16,8 +16,8 @@ import { WeatherService } from "app/weather.service";
 })
 export class ConditionDetailCardComponent {
   @Input({ required: true }) weatherCondition: ConditionsAndZip;
-  router = inject(Router);
-  weatherService = inject(WeatherService);
+  private readonly router = inject(Router);
+  readonly weatherIconService = inject(WeatherIconService);
 
   showForecast(zipcode: string) {
     this.router.navigate(["/forecast", zipcode]);

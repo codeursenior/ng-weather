@@ -5,7 +5,7 @@ import {
   Input,
   Output,
 } from "@angular/core";
-import { ConditionsAndZip } from "../../conditions-and-zip.type";
+import { ConditionsAndZip } from "../conditions-and-zip.type";
 import { ConditionDetailCardComponent } from "../condition-detail-card/condition-detail-card.component";
 import { TabOption } from "app/shared/tabs/tabs.component";
 
@@ -16,7 +16,9 @@ import { TabOption } from "app/shared/tabs/tabs.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CurrentConditionsComponent {
+  @Output() locationRemoved: EventEmitter<string> = new EventEmitter();
   private _currentConditionsByZip: ConditionsAndZip[];
+  tabOptionList: TabOption[];
 
   @Input()
   set currentConditionsByZip(value: ConditionsAndZip[]) {
@@ -33,16 +35,8 @@ export class CurrentConditionsComponent {
     });
   }
 
-  get currentConditionsByZip(): ConditionsAndZip[] {
-    return this._currentConditionsByZip;
-  }
-
-  @Output() locationRemoved: EventEmitter<string> = new EventEmitter();
-
-  tabOptionList: TabOption[];
-
   onTabClose(index: number): void {
-    const location = this.currentConditionsByZip[index].zip;
+    const location = this._currentConditionsByZip[index].zip;
     this.locationRemoved.emit(location);
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable, inject } from "@angular/core";
-import { WeatherService } from "app/weather.service";
+import { WeatherService } from "app/core/services/weather.service";
 import { CurrentConditions } from "./current-conditions/current-conditions.type";
-import { ConditionsAndZip } from "app/conditions-and-zip.type";
+import { ConditionsAndZip } from "app/main-page/conditions-and-zip.type";
 import { BehaviorSubject } from "rxjs";
 
 type State = ConditionsAndZip[];

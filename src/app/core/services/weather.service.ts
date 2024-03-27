@@ -1,11 +1,11 @@
 import { Injectable, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { CurrentConditions } from "./main-page/current-conditions/current-conditions.type";
-import { Forecast } from "./forecasts-list/forecast.type";
+import { CurrentConditions } from "../../main-page/current-conditions/current-conditions.type";
+import { Forecast } from "../../forecasts-list/forecast.type";
 import { tap } from "rxjs/operators";
 
-// TO-DO : Keep this service for HTTP calls only.
+/* WeatherService service is for HTTP calls only.*/
 @Injectable()
 export class WeatherService {
   static URL = "http://api.openweathermap.org/data/2.5";
@@ -21,26 +21,10 @@ export class WeatherService {
     return this.http.get<CurrentConditions>(`${baseUrl}${queryParams}`);
   }
 
-  getForecast(zipcode: string): Observable<Forecast> {
+  fetchForecast(zipcode: string): Observable<Forecast> {
     // Here we make a request to get the forecast data from the API. Note the use of backticks and an expression to insert the zipcode
     return this.http.get<Forecast>(
       `${WeatherService.URL}/forecast/daily?zip=${zipcode},us&units=imperial&cnt=5&APPID=${WeatherService.APPID}`
     );
-  }
-
-  getWeatherIcon(id): string {
-    if (id >= 200 && id <= 232)
-      return WeatherService.ICON_URL + "art_storm.png";
-    else if (id >= 501 && id <= 511)
-      return WeatherService.ICON_URL + "art_rain.png";
-    else if (id === 500 || (id >= 520 && id <= 531))
-      return WeatherService.ICON_URL + "art_light_rain.png";
-    else if (id >= 600 && id <= 622)
-      return WeatherService.ICON_URL + "art_snow.png";
-    else if (id >= 801 && id <= 804)
-      return WeatherService.ICON_URL + "art_clouds.png";
-    else if (id === 741 || id === 761)
-      return WeatherService.ICON_URL + "art_fog.png";
-    else return WeatherService.ICON_URL + "art_clear.png";
   }
 }
