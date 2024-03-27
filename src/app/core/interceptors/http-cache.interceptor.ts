@@ -9,6 +9,7 @@ import {
 import { Observable, of } from "rxjs";
 import { HttpCacheService } from "../services/http-cache.service";
 import { tap } from "rxjs/operators";
+import { WeatherService } from "../services/weather.service";
 
 @Injectable()
 export class HttpCacheInterceptor implements HttpInterceptor {
@@ -57,9 +58,7 @@ export class HttpCacheInterceptor implements HttpInterceptor {
   /* Determine if a given request is cachable. */
   private isCacheable(request: HttpRequest<unknown>): boolean {
     const isRequestGET = request.method === "GET";
-    const isWeatherInfoRequest = request.url.startsWith(
-      "http://api.openweathermap.org/data/2.5/weather?"
-    );
+    const isWeatherInfoRequest = request.url.startsWith(WeatherService.URL);
     return isRequestGET && isWeatherInfoRequest;
   }
 }
