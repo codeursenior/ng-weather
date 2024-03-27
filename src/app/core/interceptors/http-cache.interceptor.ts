@@ -19,6 +19,7 @@ export class HttpCacheInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
+    /* Check if current request is cacheable. */
     if (!this.isCacheable(request)) {
       return next.handle(request);
     }
@@ -27,11 +28,13 @@ export class HttpCacheInterceptor implements HttpInterceptor {
     const response: HttpResponse<unknown> | null =
       this.httpCacheService.load(key);
 
+    /* Return cached http response. */
     if (response) {
       console.info(`We use cached response for request ${key}`);
       return of(new HttpResponse({ body: response.body, status: 200 }));
     }
 
+    /* Send http request to the backend and put the response in cache. */
     return next.handle(request).pipe(
       tap((event) => {
         if (event instanceof HttpResponse) {
