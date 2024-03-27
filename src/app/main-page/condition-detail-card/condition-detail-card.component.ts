@@ -16,10 +16,10 @@ import { WeatherService } from "app/weather.service";
 })
 export class ConditionDetailCardComponent {
   @Input({ required: true }) weatherCondition: ConditionsAndZip;
-
+  router = inject(Router);
   weatherService = inject(WeatherService);
 
   showForecast(zipcode: string) {
-    inject(Router).navigate(["/forecast", zipcode]);
+    this.router.navigate(["/forecast", zipcode]);
   }
 }
